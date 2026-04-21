@@ -149,7 +149,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       <input type="text" id="fSe" placeholder="Matricola, cognome..." style="width:200px">
     </div>
     <div class="tbl-wrap">
-      <table class="data"><thead><tr><th>Matricola</th><th>Cognome / Nome</th><th>Store &mdash; Z</th><th>Store &mdash; H</th><th>Job Title &mdash; Z</th><th>Job Title &mdash; H</th><th>Badge &mdash; Z</th><th>Badge &mdash; H</th><th>Stato</th></tr></thead><tbody id="tBody"></tbody></table>
+      <table class="data"><thead><tr><th>Matricola</th><th>Cognome/Nome</th><th>Store Z.</th><th>Store H.</th><th>Job Title Z.</th><th>Job Title H.</th><th>Badge Z.</th><th>Badge H.</th><th>Stato</th></tr></thead><tbody id="tBody"></tbody></table>
       <div class="pag"><button class="btn btn-s" id="bPrev">&larr;</button><button class="btn btn-s" id="bNext">&rarr;</button><span class="pi" id="pagInfo"></span></div>
     </div>
   </div>
@@ -158,12 +158,12 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
 
 <div class="page" id="pgMap">
   <p class="ptitle">Mapping Job Title &mdash; Zucchetti &rarr; Hekanize</p>
-  <p class="map-intro">Corrispondenza tra codici <strong>ENTE_PROMOTORE</strong> di Zucchetti e descrizioni <strong>Role</strong> di Hekanize.</p>
+  <p class="map-intro">Corrispondenza tra codici <strong>ENTE_PROMOTORE</strong> e descrizioni <strong>Role</strong> di Hekanize.</p>
   <div class="map-legend"><span><span class="dot dot-ok"></span>Definito</span><span><span class="dot dot-em"></span>Da completare</span></div>
   <div class="map-toolbar">
     <input type="text" id="mapSearch" placeholder="Cerca...">
     <button class="btn btn-sm btn-add" id="btnShowAdd">+ Aggiungi</button>
-    <button class="btn btn-sm btn-s" id="btnResetMap">Ripristina default</button>
+    <button class="btn btn-sm btn-s" id="btnResetMap">Ripristina</button>
   </div>
   <div class="counter-bar" id="mapCounter"></div>
   <div class="map-tbl-wrap"><table class="maptbl"><thead><tr><th style="width:120px">Codice</th><th>Descrizione Hekanize</th><th style="width:44px"></th></tr></thead><tbody id="mapBody"></tbody></table></div>
@@ -179,10 +179,13 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
 <input type="file" id="inputZ" accept=".xlsx,.xls" style="position:absolute;left:-9999px;top:-9999px">
 <input type="file" id="inputC" accept=".csv" style="position:absolute;left:-9999px;top:-9999px">
 
+<!-- Mapping data in a non-executed script tag - immune to HTML parsing issues -->
+<script type="application/json" id="mapData">{"SM": "Store Manager", "VSM": "Vice Store Manager", "SA": "Sales Advisor", "SSA": "Senior Sales Advisor", "SSAP": "Senior Sales Advisor Plus", "JSA": "Junior Sales Advisor", "VM": "Visual", "FC": "Field Coach", "FCMD": "Field Coach", "REC": "Receptionist", "PRM": "Project Manager", "ACC": "Domestic Accounting Specialist", "ACO": "Domestic Accounting Coordinator", "ADM": "Domestic Administration Manager", "AS": "Domestic HR Specialist", "RS": "Domestic HR Specialist", "CCM": "Domestic Control Manager", "CCS": "Control Specialist", "EACC": "Control Specialist", "CSP": "Retail Operations Specialist", "CSU": "Customer Service Specialist", "DROC": "Retail Operations Coordinator", "ECS": "Corporate Partnership Specialist", "HMI": "Chief Marketing Officer", "HS": "Hardware Specialist", "ICS": "Inventory Control Specialist", "LGS": "Warehouse Specialist", "MC": "Maintenance Coordinator", "MCS": "Content Development Specialist", "MPR": "PR \u0026 Corporate Partnership Manager", "OCC": "Omnichannel Customer Service Manager", "OM": "Head of Ecommerce \u0026 Digital", "PLC": "HR Administration Specialist", "PUME": "Purchasing and Merchandising Specialist", "RHD": "Networking Security \u0026 Hardware Coordinator", "RO": "Retail Audit Coordinator", "SAC": "Stock Auditing Coordinator", "SHC": "Ecommerce Shooting Coordinator", "TAP": "Tailoring \u0026 Retail Operations Specialist", "TRC": "Domestic Treasury Specialist", "WAD": "Web Art Director", "BBC": "Cost Controlling \u0026 Purchasing Coordinator", "CBC": "HR Administration Coordinator", "DRM": "", "LGC": ""}</script>
+
 <script src="xlsx.min.js"></script>
 <script>
 (function(){
-  var DMAP = {"SM": "Store Manager", "VSM": "Vice Store Manager", "SA": "Sales Advisor", "SSA": "Senior Sales Advisor", "SSAP": "Senior Sales Advisor Plus", "JSA": "Junior Sales Advisor", "VM": "Visual", "FC": "Field Coach", "FCMD": "Field Coach", "REC": "Receptionist", "PRM": "Project Manager", "ACC": "Domestic Accounting Specialist", "ACO": "Domestic Accounting Coordinator", "ADM": "Domestic Administration Manager", "AS": "Domestic HR Specialist", "RS": "Domestic HR Specialist", "CCM": "Domestic Control Manager", "CCS": "Control Specialist", "EACC": "Control Specialist", "CSP": "Retail Operations Specialist", "CSU": "Customer Service Specialist", "DROC": "Retail Operations Coordinator", "ECS": "Corporate Partnership Specialist", "HMI": "Chief Marketing Officer", "HS": "Hardware Specialist", "ICS": "Inventory Control Specialist", "LGS": "Warehouse Specialist", "MC": "Maintenance Coordinator", "MCS": "Content Development Specialist", "MPR": "PR & Corporate Partnership Manager", "OCC": "Omnichannel Customer Service Manager", "OM": "Head of Ecommerce & Digital", "PLC": "HR Administration Specialist", "PUME": "Purchasing and Merchandising Specialist", "RHD": "Networking Security & Hardware Coordinator", "RO": "Retail Audit Coordinator", "SAC": "Stock Auditing Coordinator", "SHC": "Ecommerce Shooting Coordinator", "TAP": "Tailoring & Retail Operations Specialist", "TRC": "Domestic Treasury Specialist", "WAD": "Web Art Director", "BBC": "Cost Controlling & Purchasing Coordinator", "CBC": "HR Administration Coordinator", "DRM": "", "LGC": ""};
+  var DMAP = JSON.parse(document.getElementById('mapData').textContent);
   var MAP = JSON.parse(JSON.stringify(DMAP));
   var DZ=null, DC=null, merged=[], filtered=[], pg=0, PGS=50;
 
@@ -195,7 +198,6 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     g('tab-'+id).classList.add('active');
     if(id==='pgMap') renderMap();
   }
-
   g('tab-pgMain').addEventListener('click', function(){ goPage('pgMain'); });
   g('tab-pgMap').addEventListener('click', function(){ goPage('pgMap'); });
 
@@ -390,7 +392,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var szd=r.sdz?'<span class="sn">'+r.sdz+'</span>':'';
       var scd=r.sdc?'<span class="sn">'+r.sdc+'</span>':'';
       var bzd=r.bz||'<span style="color:var(--tx3);font-size:.7rem">n/d</span>';
-      var rzD=r.rz||(r.rz_code?'<span style="color:var(--am);font-style:italic;font-size:.74rem">'+r.rz_code+' (no map)</span>':'—');
+      var rzD=r.rz||(r.rz_code?'<span style="color:var(--am);font-style:italic;font-size:.74rem">'+r.rz_code+'</span>':'—');
       var rzC=(r.rz_code&&r.rz&&r.rz!==r.rz_code)?'<span class="sn">cod:'+r.rz_code+'</span>':'';
       rows+='<tr><td style="font-family:monospace;font-size:.74rem">'+r.key+'</td><td>'+r.cog+' <span style="color:var(--tx3)">'+r.nom+'</span></td><td class="'+(sd?'dc':'')+'"><span class="'+(sd?'dv':'')+'">'+( r.sz||'—')+'</span>'+szd+'</td><td class="'+(sd?'dc':'')+'"><span class="'+(sd?'dv':'')+'">'+( r.sc||'—')+'</span>'+scd+'</td><td class="'+(rd?'dc':'')+'" style="font-size:.76rem"><span class="'+(rd?'dv':'')+'">'+rzD+'</span>'+rzC+'</td><td class="'+(rd?'dc':'')+'" style="font-size:.76rem"><span class="'+(rd?'dv':'')+'">'+( r.rc||'—')+'</span></td><td class="'+(bd?'dc':'')+'">'+bzd+'</td><td class="'+(bd?'dc':'')+'">'+( r.bc||'—')+'</td><td>'+sb+'</td></tr>';
     });
@@ -412,7 +414,6 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     XLSX.writeFile(wb,'HR_HEKANIZE_Differenze_'+new Date().toISOString().slice(0,10)+'.xlsx');
   }
 
-  // Wire all buttons
   g('btnPickZ').addEventListener('click', function(){ g('inputZ').click(); });
   g('btnPickC').addEventListener('click', function(){ g('inputC').click(); });
   g('inputZ').addEventListener('change', function(){ if(this.files&&this.files.length) readZ(this.files[0]); });
