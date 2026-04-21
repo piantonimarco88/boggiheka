@@ -55,23 +55,36 @@ body{font-family:'Century Gothic','Futura',sans-serif;background:var(--bpg);colo
 .st-bd .val{color:var(--bd)}.st-gn .val{color:var(--gn)}.st-rd .val{color:var(--rd)}.st-am .val{color:var(--am)}.st-bl .val{color:var(--bl2)}
 #nb{display:none;background:var(--amb);border:1px solid var(--bdk);border-left:3px solid var(--am);border-radius:var(--rs);padding:.7rem 1rem;font-size:.76rem;color:var(--am);margin-bottom:1.5rem;line-height:1.6;}
 .stl{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:.6rem;}
-.fb3{display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap;}
+.fbar{display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap;}
 .fl{font-size:.62rem;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;}
-.fb3 select,.fb3 input[type=text]{font-family:'Century Gothic',sans-serif;font-size:.78rem;padding:.4rem .7rem;border:1px solid var(--br);border-radius:var(--rs);background:var(--wh);color:var(--tx);}
+.fbar select,.fbar input[type=text]{font-family:'Century Gothic',sans-serif;font-size:.78rem;padding:.4rem .7rem;border:1px solid var(--br);border-radius:var(--rs);background:var(--wh);color:var(--tx);}
 .tw{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;}
-table.data{width:100%;border-collapse:collapse;font-size:.78rem;}
-table.data thead th{background:var(--bd);color:var(--bmd);padding:.7rem .75rem;text-align:left;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;font-weight:400;}
+table.data{width:100%;border-collapse:collapse;font-size:.76rem;table-layout:fixed;}
+table.data thead th{background:var(--bd);color:var(--bmd);padding:.65rem .6rem;text-align:left;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+table.data colgroup col:nth-child(1){width:88px;}
+table.data colgroup col:nth-child(2){width:160px;}
+table.data colgroup col:nth-child(3){width:12%;}
+table.data colgroup col:nth-child(4){width:12%;}
+table.data colgroup col:nth-child(5){width:13%;}
+table.data colgroup col:nth-child(6){width:13%;}
+table.data colgroup col:nth-child(7){width:80px;}
+table.data colgroup col:nth-child(8){width:100px;}
+table.data colgroup col:nth-child(9){width:90px;}
 table.data tbody tr{border-bottom:1px solid var(--br);}
 table.data tbody tr:last-child{border-bottom:none;}
 table.data tbody tr:hover{background:var(--blt);}
-table.data td{padding:.55rem .75rem;color:var(--tx);vertical-align:top;}
-.bdg{display:inline-block;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .55rem;border-radius:99px;white-space:nowrap;}
+table.data td{padding:.5rem .6rem;color:var(--tx);vertical-align:top;overflow:hidden;}
+.cv{display:flex;flex-direction:column;gap:2px;}
+.mono{font-family:monospace;font-size:.72rem;}
+.cn{font-size:.8rem;}
+.cnm{font-size:.8rem;color:var(--tx3);}
+.bdg{display:inline-block;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .5rem;border-radius:99px;white-space:nowrap;}
 .bo{background:var(--gnb);color:var(--gn)}.bd2{background:var(--rdb);color:var(--rd)}.bw{background:var(--amb);color:var(--am)}.bi{background:var(--blb);color:var(--bl2)}
-.dc{background:#fdf0f0}.dv{color:var(--rd)}
+.dc{background:#fdf0f0}.dv{color:var(--rd);font-size:.76rem;}
 .pag{display:flex;gap:.5rem;align-items:center;padding:.75rem 1rem;border-top:1px solid var(--br);font-size:.72rem;color:var(--tx2);}
 .pag .btn{padding:.25rem .65rem;font-size:.72rem;letter-spacing:0;}
 #pi{margin:0 auto;}
-.sn{font-size:.68rem;color:var(--tx3);display:block;margin-top:2px;}
+.sn{font-size:.66rem;color:var(--tx3);}
 #es{padding:3rem 2rem;text-align:center;color:var(--tx3);font-size:.88rem;line-height:1.8;}
 .mi2{font-size:.82rem;color:var(--tx2);margin-bottom:1.25rem;line-height:1.7;}
 .ml{display:flex;gap:1.25rem;font-size:.68rem;color:var(--tx3);margin-bottom:.8rem;align-items:center;}
@@ -91,8 +104,8 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
 .mi:focus{outline:none;border-color:var(--bm);}
 .me{background:#fff8f0;border-color:var(--bdk);}
 .mc2{border-color:var(--gn);}
-.bd{background:none;border:none;color:var(--tx3);font-size:.95rem;padding:.15rem .45rem;cursor:pointer;}
-.bd:hover{color:var(--rd);}
+.bddel{background:none;border:none;color:var(--tx3);font-size:.95rem;padding:.15rem .45rem;cursor:pointer;}
+.bddel:hover{color:var(--rd);}
 #aB{display:none;gap:.5rem;align-items:center;padding:1rem 1.25rem;background:var(--blt);border:1px solid var(--br);border-radius:var(--rs);flex-wrap:wrap;margin-bottom:.75rem;}
 #aB input{font-family:'Century Gothic',sans-serif;font-size:.78rem;padding:.38rem .65rem;border:1px solid var(--br);border-radius:var(--rs);background:var(--wh);color:var(--tx);}
 .mn{font-size:.7rem;color:var(--tx3);margin-top:.75rem;line-height:1.6;}
@@ -133,14 +146,41 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   <div id="ss" style="display:none">
     <div class="sg" id="sg"></div>
     <p class="stl">Dettaglio - <span id="fc"></span></p>
-    <div class="fb3">
+    <div class="fbar">
       <span class="fl">Filtro</span>
-      <select id="fSt"><option value="all">Tutti</option><option value="diff">Solo differenze</option><option value="aligned">Solo allineati</option><option value="only_z">Solo Zucchetti</option><option value="only_c">Solo Hekanize</option></select>
-      <select id="fFi"><option value="all">Tutti i campi</option><option value="store">Store</option><option value="role">Job Title</option><option value="badge">Badge</option></select>
-      <input type="text" id="fSe" placeholder="Matricola, cognome..." style="width:200px">
+      <select id="fSt">
+        <option value="all">Tutti i record</option>
+        <option value="diff">Solo con differenze</option>
+        <option value="aligned">Solo allineati</option>
+        <option value="only_z">Solo in Zucchetti</option>
+        <option value="only_c">Solo in Hekanize</option>
+      </select>
+      <select id="fFi">
+        <option value="all">Tutti i campi</option>
+        <option value="store">Store diverso</option>
+        <option value="store_ok">Store allineato</option>
+        <option value="role">Job Title diverso</option>
+        <option value="role_ok">Job Title allineato</option>
+        <option value="badge">Badge diverso</option>
+      </select>
+      <input type="text" id="fSe" placeholder="Matricola, cognome, store, ruolo..." style="width:240px">
     </div>
     <div class="tw">
-      <table class="data"><thead><tr><th>Matricola</th><th>Cognome/Nome</th><th>Store Z.</th><th>Store H.</th><th>Job Title Z.</th><th>Job Title H.</th><th>Badge Z.</th><th>Badge H.</th><th>Stato</th></tr></thead><tbody id="tB"></tbody></table>
+      <table class="data">
+        <colgroup><col><col><col><col><col><col><col><col><col></colgroup>
+        <thead><tr>
+          <th>Matricola</th>
+          <th>Cognome / Nome</th>
+          <th>Store Zucchetti</th>
+          <th>Store Hekanize</th>
+          <th>Job Title Zucchetti</th>
+          <th>Job Title Hekanize</th>
+          <th>Badge Zucchetti</th>
+          <th>Badge Hekanize</th>
+          <th>Stato</th>
+        </tr></thead>
+        <tbody id="tB"></tbody>
+      </table>
       <div class="pag"><button class="btn bs" id="bPrev">&#8592;</button><button class="btn bs" id="bNext">&#8594;</button><span id="pi"></span></div>
     </div>
   </div>
@@ -155,7 +195,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     <button class="btn bsm ba" id="bSA">+ Aggiungi</button>
     <button class="btn bsm bs" id="bRM">Ripristina</button>
   </div>
-  <div class="counter-bar" id="mc" style="font-size:.68rem;color:var(--tx3);margin-bottom:.5rem;"></div>
+  <div id="mc" style="font-size:.68rem;color:var(--tx3);margin-bottom:.5rem;"></div>
   <div class="mtw"><table class="maptbl"><thead><tr><th style="width:120px">Codice</th><th>Descrizione Hekanize</th><th style="width:44px"></th></tr></thead><tbody id="mb"></tbody></table></div>
   <div id="aB">
     <input type="text" id="nC" placeholder="Codice" style="width:130px;text-transform:uppercase">
@@ -190,12 +230,12 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var code=codes[i],desc=MAP[code]||'';
       if(q&&code.toLowerCase().indexOf(q)===-1&&desc.toLowerCase().indexOf(q)===-1)continue;
       if(!desc.trim())empty++;shown++;
-      rows+='<tr><td>'+code+'</td><td><input class="mi'+(desc.trim()?'':' me')+'" data-c="'+code+'" value="'+esc(desc)+'" placeholder="(nessuna traduzione)"></td><td><button class="bd" data-d="'+code+'">x</button></td></tr>';
+      rows+='<tr><td>'+code+'</td><td><input class="mi'+(desc.trim()?'':' me')+'" data-c="'+code+'" value="'+esc(desc)+'" placeholder="(nessuna traduzione)"></td><td><button class="bddel" data-d="'+code+'">x</button></td></tr>';
     }
     if(!rows)rows='<tr><td colspan="3" style="padding:.75rem;color:var(--tx3);font-size:.75rem;text-align:center">Nessun risultato</td></tr>';
     g('mb').innerHTML=rows;
     g('mc').textContent=shown+' codici'+(empty?' - '+empty+' senza descrizione':' - tutti definiti');
-    var mis=document.querySelectorAll('.mi'),bds=document.querySelectorAll('.bd'),j;
+    var mis=document.querySelectorAll('.mi'),bds=document.querySelectorAll('.bddel'),j;
     for(j=0;j<mis.length;j++)(function(el){
       el.addEventListener('input',function(){MAP[this.getAttribute('data-c')]=this.value;this.classList.toggle('me',!this.value.trim());this.classList.add('mc2');});
       el.addEventListener('blur',function(){MAP[this.getAttribute('data-c')]=this.value.trim();});
@@ -261,6 +301,10 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   }
   function z7(s){var str=String(s==null?'':s).trim();if(!str)return'';while(str.length<7)str='0'+str;return str.slice(-7);}
   function sCode(wl){var s=String(wl||''),d='',i;for(i=0;i<s.length;i++){if(s[i]>='0'&&s[i]<='9')d+=s[i];else break;}return d;}
+  function sDesc(wl){
+    var s=String(wl||''),idx=s.indexOf(' - ');
+    return idx>-1?s.slice(idx+3):s;
+  }
   function isN(s){if(!s||!s.length)return false;for(var i=0;i<s.length;i++)if(s[i]<'0'||s[i]>'9')return false;return true;}
   function nrm(s){return String(s||'').trim().toUpperCase();}
   function doAn(){
@@ -268,16 +312,19 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     for(i=0;i<DZ.length;i++){
       row=DZ[i];key=z7(row['dipendente']||row['matricola_per_paghe']||'');if(!key)continue;
       var cdc=String(row['centro_di_costo']||'').trim(),rc=String(row['ENTE_PROMOTORE']||'').trim();
+      var storeNum=isN(cdc)?cdc:'';
+      var storeDesc=storeNum?String(row['centro_di_costo_descrizione']||'').trim():'';
       mZ[key]={key:key,cog:String(row['cognome']||'').trim(),nom:String(row['nome']||'').trim(),
-        sz:isN(cdc)?cdc:'',sdz:String(row['centro_di_costo_descrizione']||'').trim(),
+        sz:storeNum,sdz:storeDesc,
         rzc:rc,rz:xlate(rc),bz:String(row['Badge1']||row['Badge2']||row['Badge3']||'').trim()};
     }
     for(i=0;i<DC.length;i++){
       row=DC[i];key=z7(row['External ID']||'');if(!key)continue;
       var wl=row['Work Location']||'',br=String(row['Assigned Badge']||'');
       var di=br.indexOf('.');if(di>-1)br=br.slice(0,di);
+      var sc2=sCode(wl),sdc2=sDesc(wl);
       mC[key]={key:key,cog:String(row['Last Name']||'').trim(),nom:String(row['First Name']||'').trim(),
-        sc:sCode(wl),sdc:wl,rc:String(row['Role']||'').trim(),bc:br.trim()};
+        sc:sc2,sdc:sdc2,rc:String(row['Role']||'').trim(),bc:br.trim()};
     }
     var all={};for(k in mZ)all[k]=1;for(k in mC)all[k]=1;merged=[];
     for(k in all){
@@ -321,33 +368,52 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       if(s==='diff'&&r.st!=='both')continue;if(s==='diff'&&r.sm&&r.rm&&(r.bm||r.bs==='nz'))continue;
       if(s==='aligned'&&(r.st!=='both'||!r.sm||!r.rm))continue;
       if(s==='only_z'&&r.st!=='oz')continue;if(s==='only_c'&&r.st!=='oc')continue;
-      if(f==='store'&&(r.st!=='both'||r.sm))continue;if(f==='role'&&(r.st!=='both'||r.rm))continue;
+      if(f==='store'&&(r.st!=='both'||r.sm))continue;
+      if(f==='role'&&(r.st!=='both'||r.rm))continue;
       if(f==='badge'&&(r.st!=='both'||r.bs!=='diff'))continue;
-      if(q&&(r.key+' '+r.cog+' '+r.nom).toLowerCase().indexOf(q)===-1)continue;
+      if(f==='store_ok'&&(r.st!=='both'||!r.sm))continue;
+      if(f==='role_ok'&&(r.st!=='both'||!r.rm))continue;
+      if(q){
+        var hay=r.key+' '+r.cog+' '+r.nom+' '+r.sz+' '+r.sdz+' '+r.sc+' '+r.sdc+' '+r.rz+' '+r.rc+' '+r.bz+' '+r.bc;
+        if(hay.toLowerCase().indexOf(q)===-1)continue;
+      }
       filtered.push(r);
     }
     pg=0;
+  }
+  function cell(val,sub,diff){
+    var s='<td class="'+(diff?'dc':'')+'"><div class="cv"><span class="'+(diff?'dv':'')+'">'+( val||'-')+'</span>';
+    if(sub)s+='<span class="sn">'+sub+'</span>';
+    s+='</div></td>';
+    return s;
   }
   function rTable(){
     apF();var start=pg*PS,page=filtered.slice(start,start+PS),i;
     g('fc').textContent=filtered.length+' risultati';
     var tb=g('tB');
-    if(!page.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--tx3);padding:2rem;font-size:.75rem">Nessun risultato</td></tr>';updP();return;}
+    if(!page.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--tx3);padding:2rem;font-size:.75rem">Nessun risultato</td></tr>';updP();return;}
     var rows='';
     for(i=0;i<page.length;i++){
       var r=page[i];
       var sd=r.st==='both'&&!r.sm,rd=r.st==='both'&&!r.rm,bd=r.st==='both'&&r.bs==='diff';
       var sb;
-      if(r.st==='oz')sb='<span class="bdg bw">Solo Z.</span>';
-      else if(r.st==='oc')sb='<span class="bdg bi">Solo H.</span>';
-      else if(!sd&&!rd&&!bd)sb='<span class="bdg bo">OK</span>';
-      else sb='<span class="bdg bd2">Diff.</span>';
-      var szd=r.sdz?'<span class="sn">'+r.sdz+'</span>':'';
-      var scd=r.sdc?'<span class="sn">'+r.sdc+'</span>':'';
-      var bzd=r.bz||'<span style="color:var(--tx3);font-size:.7rem">n/d</span>';
-      var rzD=r.rz||(r.rzc?'<span style="color:var(--am);font-style:italic;font-size:.74rem">'+r.rzc+'</span>':'-');
-      var rzC=(r.rzc&&r.rz&&r.rz!==r.rzc)?'<span class="sn">cod:'+r.rzc+'</span>':'';
-      rows+='<tr><td style="font-family:monospace;font-size:.74rem">'+r.key+'</td><td>'+r.cog+' <span style="color:var(--tx3)">'+r.nom+'</span></td><td class="'+(sd?'dc':'')+'"><span class="'+(sd?'dv':'')+'">'+( r.sz||'-')+'</span>'+szd+'</td><td class="'+(sd?'dc':'')+'"><span class="'+(sd?'dv':'')+'">'+( r.sc||'-')+'</span>'+scd+'</td><td class="'+(rd?'dc':'')+'" style="font-size:.76rem"><span class="'+(rd?'dv':'')+'">'+rzD+'</span>'+rzC+'</td><td class="'+(rd?'dc':'')+'" style="font-size:.76rem"><span class="'+(rd?'dv':'')+'">'+( r.rc||'-')+'</span></td><td class="'+(bd?'dc':'')+'">'+bzd+'</td><td class="'+(bd?'dc':'')+'">'+( r.bc||'-')+'</td><td>'+sb+'</td></tr>';
+      if(r.st==='oz')sb='<span class="bdg bw">Solo Zucchetti</span>';
+      else if(r.st==='oc')sb='<span class="bdg bi">Solo Hekanize</span>';
+      else if(!sd&&!rd&&!bd)sb='<span class="bdg bo">Allineato</span>';
+      else sb='<span class="bdg bd2">Differenze</span>';
+      var bzd=r.bz||'<span style="color:var(--tx3)">n/d</span>';
+      var rzZ=r.rz||(r.rzc?'<span style="color:var(--am);font-style:italic">'+r.rzc+'</span>':'-');
+      var rzZsub=(r.rzc&&r.rz&&r.rz!==r.rzc)?r.rzc:'';
+      rows+='<tr>'+
+        '<td class="mono">'+r.key+'</td>'+
+        '<td><span class="cn">'+r.cog+'</span> <span class="cnm">'+r.nom+'</span></td>'+
+        cell(r.sz?r.sz+(r.sdz?' - '+r.sdz:''):'',null,sd)+
+        cell(r.sc?r.sc+(r.sdc?' - '+r.sdc:''):'',null,sd)+
+        '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+rzZ+'</span>'+(rzZsub?'<span class="sn">cod: '+rzZsub+'</span>':'')+'</div></td>'+
+        '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+( r.rc||'-')+'</span></div></td>'+
+        '<td class="'+(bd?'dc':'')+'"><div class="cv">'+bzd+'</div></td>'+
+        '<td class="'+(bd?'dc':'')+'"><div class="cv">'+( r.bc||'-')+'</div></td>'+
+        '<td>'+sb+'</td></tr>';
     }
     tb.innerHTML=rows;updP();
   }
@@ -364,12 +430,14 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var r=diffs[i];
       rows.push({'Matricola':r.key,'Cognome':r.cog,'Nome':r.nom,
         'Presenza':r.st==='oz'?'Solo Zucchetti':r.st==='oc'?'Solo Hekanize':'Entrambi',
-        'Store ID Z':r.sz||'','Store Descr Z':r.sdz||'','Store ID H':r.sc||'','Store Descr H':r.sdc||'',
+        'Store ID - Zucchetti':r.sz||'','Store Descr - Zucchetti':r.sdz||'',
+        'Store ID - Hekanize':r.sc||'','Store Descr - Hekanize':r.sdc||'',
         'Store match':r.st==='both'?(r.sm?'SI':'NO'):'N/A',
-        'Job Title Cod Z':r.rzc||'','Job Title Trad Z':r.rz||'','Job Title H':r.rc||'',
+        'Job Title Codice Zucchetti':r.rzc||'','Job Title Tradotto Zucchetti':r.rz||'',
+        'Job Title Hekanize':r.rc||'',
         'Job Title match':r.st==='both'?(r.rm?'SI':'NO'):'N/A',
-        'Badge Z':r.bz||'n/d','Badge H':r.bc||'',
-        'Badge match':r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Z':'NO'):'N/A'});
+        'Badge Zucchetti':r.bz||'n/d','Badge Hekanize':r.bc||'',
+        'Badge match':r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A'});
     }
     var ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'Differenze HR');
