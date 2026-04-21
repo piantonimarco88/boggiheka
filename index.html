@@ -59,32 +59,36 @@ body{font-family:'Century Gothic','Futura',sans-serif;background:var(--bpg);colo
 .fl{font-size:.62rem;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;}
 .fbar select,.fbar input[type=text]{font-family:'Century Gothic',sans-serif;font-size:.78rem;padding:.4rem .7rem;border:1px solid var(--br);border-radius:var(--rs);background:var(--wh);color:var(--tx);}
 .tw{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;}
-table.data{width:100%;border-collapse:collapse;font-size:.76rem;table-layout:fixed;}
-table.data thead th{background:var(--bd);color:var(--bmd);padding:.65rem .6rem;text-align:left;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-table.data colgroup col:nth-child(1){width:88px;}
-table.data colgroup col:nth-child(2){width:160px;}
-table.data colgroup col:nth-child(3){width:12%;}
-table.data colgroup col:nth-child(4){width:12%;}
-table.data colgroup col:nth-child(5){width:13%;}
-table.data colgroup col:nth-child(6){width:13%;}
-table.data colgroup col:nth-child(7){width:80px;}
-table.data colgroup col:nth-child(8){width:100px;}
-table.data colgroup col:nth-child(9){width:90px;}
+table.data{width:100%;border-collapse:collapse;font-size:.75rem;table-layout:fixed;}
+table.data colgroup col:nth-child(1){width:86px;}
+table.data colgroup col:nth-child(2){width:150px;}
+table.data colgroup col:nth-child(3){width:11%;}
+table.data colgroup col:nth-child(4){width:11%;}
+table.data colgroup col:nth-child(5){width:12%;}
+table.data colgroup col:nth-child(6){width:12%;}
+table.data colgroup col:nth-child(7){width:72px;}
+table.data colgroup col:nth-child(8){width:90px;}
+table.data colgroup col:nth-child(9){width:120px;}
+table.data thead th{background:var(--bd);color:var(--bmd);padding:.6rem .55rem;text-align:left;font-size:.56rem;letter-spacing:.07em;text-transform:uppercase;font-weight:400;white-space:normal;line-height:1.3;vertical-align:bottom;}
 table.data tbody tr{border-bottom:1px solid var(--br);}
 table.data tbody tr:last-child{border-bottom:none;}
 table.data tbody tr:hover{background:var(--blt);}
-table.data td{padding:.5rem .6rem;color:var(--tx);vertical-align:top;overflow:hidden;}
+table.data td{padding:.48rem .55rem;color:var(--tx);vertical-align:top;overflow:hidden;font-size:.74rem;}
 .cv{display:flex;flex-direction:column;gap:2px;}
 .mono{font-family:monospace;font-size:.72rem;}
-.cn{font-size:.8rem;}
-.cnm{font-size:.8rem;color:var(--tx3);}
-.bdg{display:inline-block;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .5rem;border-radius:99px;white-space:nowrap;}
-.bo{background:var(--gnb);color:var(--gn)}.bd2{background:var(--rdb);color:var(--rd)}.bw{background:var(--amb);color:var(--am)}.bi{background:var(--blb);color:var(--bl2)}
-.dc{background:#fdf0f0}.dv{color:var(--rd);font-size:.76rem;}
+.cn{font-size:.78rem;}
+.cnm{font-size:.78rem;color:var(--tx3);}
+/* difference tags in stato column */
+.tag{display:inline-block;font-size:.58rem;letter-spacing:.04em;padding:.12rem .38rem;border-radius:4px;margin:.1rem .1rem .1rem 0;white-space:nowrap;font-weight:400;}
+.tr{background:var(--rdb);color:var(--rd);}
+.tg2{background:var(--gnb);color:var(--gn);}
+.tw2{background:var(--amb);color:var(--am);}
+.ti{background:var(--blb);color:var(--bl2);}
+.dc{background:#fdf0f0;}.dv{color:var(--rd);}
 .pag{display:flex;gap:.5rem;align-items:center;padding:.75rem 1rem;border-top:1px solid var(--br);font-size:.72rem;color:var(--tx2);}
 .pag .btn{padding:.25rem .65rem;font-size:.72rem;letter-spacing:0;}
 #pi{margin:0 auto;}
-.sn{font-size:.66rem;color:var(--tx3);}
+.sn{font-size:.65rem;color:var(--tx3);}
 #es{padding:3rem 2rem;text-align:center;color:var(--tx3);font-size:.88rem;line-height:1.8;}
 .mi2{font-size:.82rem;color:var(--tx2);margin-bottom:1.25rem;line-height:1.7;}
 .ml{display:flex;gap:1.25rem;font-size:.68rem;color:var(--tx3);margin-bottom:.8rem;align-items:center;}
@@ -171,13 +175,13 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         <thead><tr>
           <th>Matricola</th>
           <th>Cognome / Nome</th>
-          <th>Store Zucchetti</th>
-          <th>Store Hekanize</th>
-          <th>Job Title Zucchetti</th>
-          <th>Job Title Hekanize</th>
-          <th>Badge Zucchetti</th>
-          <th>Badge Hekanize</th>
-          <th>Stato</th>
+          <th>Store<br>Zucchetti</th>
+          <th>Store<br>Hekanize</th>
+          <th>Job Title<br>Zucchetti</th>
+          <th>Job Title<br>Hekanize</th>
+          <th>Badge<br>Zucchetti</th>
+          <th>Badge<br>Hekanize</th>
+          <th>Differenze rilevate</th>
         </tr></thead>
         <tbody id="tB"></tbody>
       </table>
@@ -301,12 +305,22 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   }
   function z7(s){var str=String(s==null?'':s).trim();if(!str)return'';while(str.length<7)str='0'+str;return str.slice(-7);}
   function sCode(wl){var s=String(wl||''),d='',i;for(i=0;i<s.length;i++){if(s[i]>='0'&&s[i]<='9')d+=s[i];else break;}return d;}
-  function sDesc(wl){
-    var s=String(wl||''),idx=s.indexOf(' - ');
-    return idx>-1?s.slice(idx+3):s;
-  }
+  function sDesc(wl){var s=String(wl||''),idx=s.indexOf(' - ');return idx>-1?s.slice(idx+3):s;}
   function isN(s){if(!s||!s.length)return false;for(var i=0;i<s.length;i++)if(s[i]<'0'||s[i]>'9')return false;return true;}
   function nrm(s){return String(s||'').trim().toUpperCase();}
+
+  /* Build difference tags for stato cell */
+  function diffTags(r){
+    if(r.st==='oz')return'<span class="tag tw">Solo Zucchetti</span>';
+    if(r.st==='oc')return'<span class="tag ti">Solo Hekanize</span>';
+    var tags=[],allOk=true;
+    if(!r.sm){tags.push('<span class="tag tr">Store</span>');allOk=false;}
+    if(!r.rm){tags.push('<span class="tag tr">Job Title</span>');allOk=false;}
+    if(r.bs==='diff'){tags.push('<span class="tag tr">Badge</span>');allOk=false;}
+    if(allOk)return'<span class="tag tg2">Allineato</span>';
+    return tags.join('');
+  }
+
   function doAn(){
     var i,k,mZ={},mC={},row,key;
     for(i=0;i<DZ.length;i++){
@@ -315,16 +329,15 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var storeNum=isN(cdc)?cdc:'';
       var storeDesc=storeNum?String(row['centro_di_costo_descrizione']||'').trim():'';
       mZ[key]={key:key,cog:String(row['cognome']||'').trim(),nom:String(row['nome']||'').trim(),
-        sz:storeNum,sdz:storeDesc,
-        rzc:rc,rz:xlate(rc),bz:String(row['Badge1']||row['Badge2']||row['Badge3']||'').trim()};
+        sz:storeNum,sdz:storeDesc,rzc:rc,rz:xlate(rc),
+        bz:String(row['Badge1']||row['Badge2']||row['Badge3']||'').trim()};
     }
     for(i=0;i<DC.length;i++){
       row=DC[i];key=z7(row['External ID']||'');if(!key)continue;
       var wl=row['Work Location']||'',br=String(row['Assigned Badge']||'');
       var di=br.indexOf('.');if(di>-1)br=br.slice(0,di);
-      var sc2=sCode(wl),sdc2=sDesc(wl);
       mC[key]={key:key,cog:String(row['Last Name']||'').trim(),nom:String(row['First Name']||'').trim(),
-        sc:sc2,sdc:sdc2,rc:String(row['Role']||'').trim(),bc:br.trim()};
+        sc:sCode(wl),sdc:sDesc(wl),rc:String(row['Role']||'').trim(),bc:br.trim()};
     }
     var all={};for(k in mZ)all[k]=1;for(k in mC)all[k]=1;merged=[];
     for(k in all){
@@ -354,6 +367,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     g('ss').style.display='block';g('es').style.display='none';
     g('bE').disabled=false;g('bA').disabled=false;g('lm').textContent='';
   }
+
   function rStats(both,oz,oc){
     var sok=0,rok=0,fok=0,i;
     for(i=0;i<both.length;i++){if(both[i].sm)sok++;if(both[i].rm)rok++;if(both[i].sm&&both[i].rm&&(both[i].bm||both[i].bs==='nz'))fok++;}
@@ -361,6 +375,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     function pct(n,t){return t?Math.round(n/t*100)+'%':'-';}
     g('sg').innerHTML=sc('st-bd','Matricole abbinate',both.length,'su '+merged.length+' totali')+sc('st-gn','Pienamente allineati',fok,pct(fok,both.length)+' dei match')+sc('st-rd','Store diversi',both.length-sok,'su '+both.length+' abbinati')+sc('st-am','Job Title diversi',both.length-rok,'su '+both.length+' abbinati')+sc('st-bl','Solo in Hekanize',oc.length,'non trovati in Zucchetti');
   }
+
   function apF(){
     var s=g('fSt').value,f=g('fFi').value,q=g('fSe').value.toLowerCase(),i;filtered=[];
     for(i=0;i<merged.length;i++){
@@ -381,69 +396,143 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     }
     pg=0;
   }
-  function cell(val,sub,diff){
-    var s='<td class="'+(diff?'dc':'')+'"><div class="cv"><span class="'+(diff?'dv':'')+'">'+( val||'-')+'</span>';
-    if(sub)s+='<span class="sn">'+sub+'</span>';
-    s+='</div></td>';
-    return s;
-  }
+
   function rTable(){
     apF();var start=pg*PS,page=filtered.slice(start,start+PS),i;
     g('fc').textContent=filtered.length+' risultati';
     var tb=g('tB');
-    if(!page.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--tx3);padding:2rem;font-size:.75rem">Nessun risultato</td></tr>';updP();return;}
+    if(!page.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--tx3);padding:2rem;font-size:.75rem">Nessun risultato</td></tr>';updP();return;}
     var rows='';
     for(i=0;i<page.length;i++){
       var r=page[i];
       var sd=r.st==='both'&&!r.sm,rd=r.st==='both'&&!r.rm,bd=r.st==='both'&&r.bs==='diff';
-      var sb;
-      if(r.st==='oz')sb='<span class="bdg bw">Solo Zucchetti</span>';
-      else if(r.st==='oc')sb='<span class="bdg bi">Solo Hekanize</span>';
-      else if(!sd&&!rd&&!bd)sb='<span class="bdg bo">Allineato</span>';
-      else sb='<span class="bdg bd2">Differenze</span>';
-      var bzd=r.bz||'<span style="color:var(--tx3)">n/d</span>';
       var rzZ=r.rz||(r.rzc?'<span style="color:var(--am);font-style:italic">'+r.rzc+'</span>':'-');
       var rzZsub=(r.rzc&&r.rz&&r.rz!==r.rzc)?r.rzc:'';
+      var bzd=r.bz||'<span style="color:var(--tx3)">n/d</span>';
       rows+='<tr>'+
         '<td class="mono">'+r.key+'</td>'+
         '<td><span class="cn">'+r.cog+'</span> <span class="cnm">'+r.nom+'</span></td>'+
-        cell(r.sz?r.sz+(r.sdz?' - '+r.sdz:''):'',null,sd)+
-        cell(r.sc?r.sc+(r.sdc?' - '+r.sdc:''):'',null,sd)+
+        '<td class="'+(sd?'dc':'')+'"><div class="cv"><span class="'+(sd?'dv':'')+'">'+( r.sz?r.sz+(r.sdz?' - '+r.sdz:''):'-')+'</span></div></td>'+
+        '<td class="'+(sd?'dc':'')+'"><div class="cv"><span class="'+(sd?'dv':'')+'">'+( r.sc?r.sc+(r.sdc?' - '+r.sdc:''):'-')+'</span></div></td>'+
         '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+rzZ+'</span>'+(rzZsub?'<span class="sn">cod: '+rzZsub+'</span>':'')+'</div></td>'+
         '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+( r.rc||'-')+'</span></div></td>'+
         '<td class="'+(bd?'dc':'')+'"><div class="cv">'+bzd+'</div></td>'+
         '<td class="'+(bd?'dc':'')+'"><div class="cv">'+( r.bc||'-')+'</div></td>'+
-        '<td>'+sb+'</td></tr>';
+        '<td>'+diffTags(r)+'</td>'+
+        '</tr>';
     }
     tb.innerHTML=rows;updP();
   }
+
   function updP(){
     var t=filtered.length,tp=Math.max(1,Math.ceil(t/PS));
     g('pi').textContent='Pag. '+(pg+1)+' / '+tp+' - '+t+' record';
     g('bPrev').disabled=pg===0;g('bNext').disabled=pg>=tp-1;
   }
+
+  /* EXCEL EXPORT with colored cells */
   function expXls(){
-    var diffs=[],i;
-    for(i=0;i<merged.length;i++){var r=merged[i];if(r.st!=='both'||!r.sm||!r.rm||r.bs==='diff')diffs.push(r);}
-    var rows=[];
-    for(i=0;i<diffs.length;i++){
-      var r=diffs[i];
-      rows.push({'Matricola':r.key,'Cognome':r.cog,'Nome':r.nom,
-        'Presenza':r.st==='oz'?'Solo Zucchetti':r.st==='oc'?'Solo Hekanize':'Entrambi',
-        'Store ID - Zucchetti':r.sz||'','Store Descr - Zucchetti':r.sdz||'',
-        'Store ID - Hekanize':r.sc||'','Store Descr - Hekanize':r.sdc||'',
-        'Store match':r.st==='both'?(r.sm?'SI':'NO'):'N/A',
-        'Job Title Codice Zucchetti':r.rzc||'','Job Title Tradotto Zucchetti':r.rz||'',
-        'Job Title Hekanize':r.rc||'',
-        'Job Title match':r.st==='both'?(r.rm?'SI':'NO'):'N/A',
-        'Badge Zucchetti':r.bz||'n/d','Badge Hekanize':r.bc||'',
-        'Badge match':r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A'});
+    var wb=XLSX.utils.book_new();
+
+    /* Colors for openpyxl-style fills via SheetJS */
+    var RED='FFFDE8E8',GRN='FFE4F0E1',AMB='FFF5EAD8',GRY='FFF5EFE5';
+
+    /* Cell style helpers */
+    function ws_cell(ws,addr,val,fill){
+      XLSX.utils.sheet_set_array_formula;
+      if(!ws[addr])ws[addr]={t:'s',v:''};
+      ws[addr].v=val===null||val===undefined?'':val;
+      ws[addr].t=(typeof val==='number')?'n':'s';
+      if(fill){
+        ws[addr].s={fill:{fgColor:{rgb:fill}},alignment:{wrapText:true,vertical:'top'}};
+      }else{
+        ws[addr].s={alignment:{wrapText:true,vertical:'top'}};
+      }
     }
-    var ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,'Differenze HR');
+
+    var headers=['Matricola','Cognome','Nome','Presenza',
+      'Store Zucchetti','Store Hekanize','Store OK?',
+      'Job Title Codice Zucchetti','Job Title Tradotto Zucchetti','Job Title Hekanize','Job Title OK?',
+      'Badge Zucchetti','Badge Hekanize','Badge OK?',
+      'Differenze rilevate'];
+
+    var ws={};
+    var cols='ABCDEFGHIJKLMNO'.split('');
+    var i,j;
+    for(j=0;j<headers.length;j++){
+      ws[cols[j]+'1']={v:headers[j],t:'s',s:{font:{bold:true},fill:{fgColor:{rgb:'FF3D2B1F'}},alignment:{wrapText:true,vertical:'top'}}};
+    }
+
+    var row=2;
+    for(i=0;i<merged.length;i++){
+      var r=merged[i];
+      var presenza=r.st==='oz'?'Solo Zucchetti':r.st==='oc'?'Solo Hekanize':'Entrambi';
+      var storeDiff=r.st==='both'&&!r.sm;
+      var roleDiff=r.st==='both'&&!r.rm;
+      var badgeDiff=r.st==='both'&&r.bs==='diff';
+      var onlyOne=r.st!=='both';
+
+      /* Build diff description */
+      var diffs=[];
+      if(r.st==='oz')diffs.push('Presente solo in Zucchetti');
+      else if(r.st==='oc')diffs.push('Presente solo in Hekanize');
+      else{
+        if(storeDiff)diffs.push('Store diverso');
+        if(roleDiff)diffs.push('Job Title diverso');
+        if(badgeDiff)diffs.push('Badge diverso');
+        if(!diffs.length)diffs.push('Allineato');
+      }
+      var diffStr=diffs.join(' | ');
+
+      var rowFill=null;
+      if(onlyOne)rowFill=AMB;
+      else if(storeDiff||roleDiff||badgeDiff)rowFill=null;
+
+      var R=String(row);
+      ws['A'+R]={v:r.key,t:'s',s:{alignment:{vertical:'top'}}};
+      ws['B'+R]={v:r.cog,t:'s',s:{alignment:{vertical:'top'}}};
+      ws['C'+R]={v:r.nom,t:'s',s:{alignment:{vertical:'top'}}};
+      ws['D'+R]={v:presenza,t:'s',s:{fill:{fgColor:{rgb:onlyOne?AMB:GRY}},alignment:{vertical:'top'}}};
+
+      /* Store */
+      var storeZval=r.sz?(r.sz+(r.sdz?' - '+r.sdz:'')):'';
+      var storeHval=r.sc?(r.sc+(r.sdc?' - '+r.sdc:'')):'';
+      ws['E'+R]={v:storeZval,t:'s',s:{fill:{fgColor:{rgb:storeDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['F'+R]={v:storeHval,t:'s',s:{fill:{fgColor:{rgb:storeDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['G'+R]={v:r.st==='both'?(r.sm?'SI':'NO'):'N/A',t:'s',s:{fill:{fgColor:{rgb:storeDiff?RED:(r.sm?GRN:GRY)}},alignment:{vertical:'top'}}};
+
+      /* Job Title */
+      ws['H'+R]={v:r.rzc||'',t:'s',s:{fill:{fgColor:{rgb:roleDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['I'+R]={v:r.rz||'',t:'s',s:{fill:{fgColor:{rgb:roleDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['J'+R]={v:r.rc||'',t:'s',s:{fill:{fgColor:{rgb:roleDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['K'+R]={v:r.st==='both'?(r.rm?'SI':'NO'):'N/A',t:'s',s:{fill:{fgColor:{rgb:roleDiff?RED:(r.rm?GRN:GRY)}},alignment:{vertical:'top'}}};
+
+      /* Badge */
+      ws['L'+R]={v:r.bz||'n/d',t:'s',s:{fill:{fgColor:{rgb:badgeDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['M'+R]={v:r.bc||'',t:'s',s:{fill:{fgColor:{rgb:badgeDiff?RED:'FFFFFFFF'}},alignment:{vertical:'top'}}};
+      ws['N'+R]={v:r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A',t:'s',s:{fill:{fgColor:{rgb:badgeDiff?RED:(r.bs==='ok'?GRN:GRY)}},alignment:{vertical:'top'}}};
+
+      /* Differenze col - colored by severity */
+      var diffFill=onlyOne?AMB:(storeDiff||roleDiff||badgeDiff)?RED:GRN;
+      ws['O'+R]={v:diffStr,t:'s',s:{fill:{fgColor:{rgb:diffFill}},alignment:{vertical:'top'}}};
+
+      row++;
+    }
+
+    ws['!ref']='A1:O'+( row-1);
+    ws['!cols']=[
+      {wch:10},{wch:18},{wch:15},{wch:16},
+      {wch:22},{wch:22},{wch:8},
+      {wch:14},{wch:28},{wch:28},{wch:8},
+      {wch:16},{wch:16},{wch:8},
+      {wch:30}
+    ];
+
+    XLSX.utils.book_append_sheet(wb,ws,'Riconciliazione HR');
     var d=new Date(),ds=d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
-    XLSX.writeFile(wb,'HR_HEKANIZE_Diff_'+ds+'.xlsx');
+    XLSX.writeFile(wb,'HR_HEKANIZE_'+ds+'.xlsx',{cellStyles:true});
   }
+
   g('pZ').addEventListener('click',function(){g('iZ').click();});
   g('pC').addEventListener('click',function(){g('iC').click();});
   g('iZ').addEventListener('change',function(){if(this.files&&this.files.length)rdZ(this.files[0]);});
