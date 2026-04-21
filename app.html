@@ -375,7 +375,8 @@ function readC(input) {
 /* === CSV === */
 function parseCSV(text) {
   var lines=[], cur='', i, ch;
-  for(i=0;i<text.length;i++){ch=text[i];if(ch==='')continue;if(ch==='
+  for(i=0;i<text.length;i++){ch=text[i];if(ch==='
+')continue;if(ch==='
 '){lines.push(cur);cur='';}else cur+=ch;}
   if(cur)lines.push(cur);
   if(lines.length<2)return[];
