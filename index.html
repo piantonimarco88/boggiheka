@@ -665,15 +665,14 @@ function toggleAzDrop(e){if(e)e.stopPropagation();var d=document.getElementById(
     if(confirm('Ripristinare il mapping predefinito?')){MAP=JSON.parse(JSON.stringify(DMAP));rMap();}
   });
   function azIsSelected(val){
-    if(!val||!val.trim())return true;
-    var cbs=document.querySelectorAll('.az-cb'),i;
-    if(!cbs.length)return true;
-    var anyChecked=false;
-    for(i=0;i<cbs.length;i++){
-      if(cbs[i].checked)anyChecked=true;
-      if(cbs[i].value===val&&cbs[i].checked)return true;
-    }
-    if(!anyChecked)return true;
+    var cbs=document.querySelectorAll('.az-cb'),i,total=0,checked=0;
+    for(i=0;i<cbs.length;i++){total++;if(cbs[i].checked)checked++;}
+    /* If no checkboxes exist yet or all selected: pass everything */
+    if(!total||checked===total)return true;
+    /* If no company (Solo Hekanize) and filter is active: exclude */
+    if(!val||!val.trim())return false;
+    /* Otherwise check if this specific company is selected */
+    for(i=0;i<cbs.length;i++){if(cbs[i].value===val&&cbs[i].checked)return true;}
     return false;
   }
   function updAzBtn(){
