@@ -177,7 +177,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       </select>
       <span class="fl">Azienda</span>
       <div class="ms-wrap" id="azWrap">
-        <button type="button" class="ms-btn" id="azBtn" onclick="toggleAzDrop()">Tutte le aziende <span class="ms-arr">&#9662;</span></button>
+        <button type="button" class="ms-btn" id="azBtn" onclick="toggleAzDrop(event)">Tutte le aziende <span class="ms-arr">&#9662;</span></button>
         <div class="ms-drop" id="azDrop" style="display:none">
           <label class="ms-item ms-all"><input type="checkbox" id="azAll" checked onchange="onAzAll(this)"><span>Tutte le aziende</span></label>
           <div id="azOptions"></div>
@@ -678,7 +678,8 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       btn.firstChild.nodeValue=label;
     }
   }
-  window.toggleAzDrop=function(){
+  window.toggleAzDrop=function(e){
+    if(e)e.stopPropagation();
     var d=g('azDrop');if(d)d.style.display=d.style.display==='none'?'block':'none';
   };
   window.onAzAll=function(cb){
