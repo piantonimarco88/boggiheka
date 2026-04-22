@@ -650,7 +650,6 @@ function toggleAzDrop(e){if(e)e.stopPropagation();var d=document.getElementById(
   g('fFi').addEventListener('change',refresh);
   g('fTipo').addEventListener('change',refresh);
   g('fCess').addEventListener('change',refresh);
-  g('fAz').addEventListener('change',refresh);
   g('fSe').addEventListener('input',refresh);
 
   /* Mapping page */
@@ -694,7 +693,6 @@ function toggleAzDrop(e){if(e)e.stopPropagation();var d=document.getElementById(
     for(i=0;i<cbs.length;i++)cbs[i].checked=cb.checked;
     updAzBtn();refresh();
   };
-  window.onAzCb=function(){updAzBtn();refresh();};
   window._updAzBtn=updAzBtn;
   window._refresh=refresh;
   /* Event delegation: handles all az-checkbox changes regardless of DOM timing */
