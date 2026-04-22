@@ -69,14 +69,14 @@ table.data colgroup col:nth-child(5){width:10%;}
 table.data colgroup col:nth-child(6){width:11%;}
 table.data colgroup col:nth-child(7){width:11%;}
 table.data colgroup col:nth-child(8){width:68px;}
-table.data colgroup col:nth-child(9){width:82px;}
+table.data colgroup col:nth-child(9){width:120px;}
 table.data colgroup col:nth-child(10){width:115px;}
 table.data thead th{background:var(--bd);color:var(--bmd);padding:.6rem .5rem;text-align:left;font-size:.55rem;letter-spacing:.06em;text-transform:uppercase;font-weight:400;white-space:normal;line-height:1.3;vertical-align:bottom;}
 table.data tbody tr{border-bottom:1px solid var(--br);}
 table.data tbody tr:last-child{border-bottom:none;}
 table.data tbody tr:hover{background:var(--blt);}
 table.data td{padding:.45rem .5rem;color:var(--tx);vertical-align:top;overflow:hidden;font-size:.73rem;}
-.cv{display:flex;flex-direction:column;gap:2px;}
+.cv{display:flex;flex-direction:column;gap:2px;} .badge-val{word-break:break-all;font-family:monospace;font-size:.7rem;}
 .mono{font-family:monospace;font-size:.71rem;}
 .cn{font-size:.77rem;}
 .cnm{font-size:.77rem;color:var(--tx3);}
@@ -165,6 +165,10 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         <option value="all">Tutti (Attivi + Cessati)</option>
         <option value="attivi">Solo Attivi</option>
         <option value="cessati">Solo Cessati</option>
+      </select>
+      <span class="fl">Azienda</span>
+      <select id="fAz" class="ftipo">
+        <option value="all">Tutte le aziende</option>
       </select>
       <span class="fl">Stato</span>
       <select id="fSt">
@@ -366,7 +370,8 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var cessRaw=row['data_cessazione'];
       var hasCess=cessRaw!==null&&cessRaw!==undefined&&String(cessRaw).trim()!==''&&String(cessRaw).trim()!=='NaN';
       var cessStr=hasCess?String(cessRaw).trim():'';
-      mZ[key]={key:key,cog:String(row['cognome']||'').trim(),nom:String(row['nome']||'').trim(),cess:hasCess,cessDate:cessStr,
+      var azDesc=String(row['azienda_descrizione']||'').trim();
+      mZ[key]={key:key,cog:String(row['cognome']||'').trim(),nom:String(row['nome']||'').trim(),cess:hasCess,cessDate:cessStr,az:azDesc,
         sz:storeNum,sdz:storeDesc,rzc:rc,rz:xlate(rc),
         bz:String(row['Badge1']||row['Badge2']||row['Badge3']||'').trim()};
     }
@@ -384,14 +389,27 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         var sm=!!(z.sz&&c.sc&&z.sz===c.sc),rm=nrm(z.rz)===nrm(c.rc);
         var bze=!z.bz,bce=!c.bc,bm=!bze&&!bce&&z.bz===c.bc;
         var bs=bze?'nz':(bce?'nc':(bm?'ok':'diff'));
-        r={key:k,st:'both',cog:z.cog||c.cog,nom:z.nom||c.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:sm,rm:rm,bm:bm,bs:bs,cess:z.cess,cessDate:z.cessDate};
+        r={key:k,st:'both',cog:z.cog||c.cog,nom:z.nom||c.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:sm,rm:rm,bm:bm,bs:bs,cess:z.cess,cessDate:z.cessDate,az:z.az};
       }else if(z){
-        r={key:k,st:'oz',cog:z.cog,nom:z.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:'',sdc:'',rc:'',bc:'',sm:false,rm:false,bm:false,bs:'nc',cess:z.cess,cessDate:z.cessDate};
+        r={key:k,st:'oz',cog:z.cog,nom:z.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:'',sdc:'',rc:'',bc:'',sm:false,rm:false,bm:false,bs:'nc',cess:z.cess,cessDate:z.cessDate,az:z.az};
       }else{
-        r={key:k,st:'oc',cog:c.cog,nom:c.nom,sz:'',sdz:'',rzc:'',rz:'',bz:'',sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:false,rm:false,bm:false,bs:'nz',cess:false,cessDate:''};
+        r={key:k,st:'oc',cog:c.cog,nom:c.nom,sz:'',sdz:'',rzc:'',rz:'',bz:'',sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:false,rm:false,bm:false,bs:'nz',cess:false,cessDate:'',az:''};
       }
       r.tipo=getTipo(r);
       merged.push(r);
+    }
+    /* Populate azienda filter */
+    var azSet={},i0;
+    for(i0=0;i0<merged.length;i0++){if(merged[i0].az)azSet[merged[i0].az]=1;}
+    var azKeys=Object.keys(azSet).sort();
+    var azSel=g('fAz');
+    var azCurrent=azSel.value;
+    azSel.innerHTML='<option value="all">Tutte le aziende</option>';
+    for(i0=0;i0<azKeys.length;i0++){
+      var opt=document.createElement('option');
+      opt.value=azKeys[i0];opt.textContent=azKeys[i0];
+      if(azKeys[i0]===azCurrent)opt.selected=true;
+      azSel.appendChild(opt);
     }
     var notes='',bnz=0,uc={},i3;
     for(i3=0;i3<merged.length;i3++){if(merged[i3].st==='both'&&merged[i3].bs==='nz')bnz++;}
@@ -444,6 +462,8 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var fC=g('fCess').value;
       if(fC==='attivi'&&r.cess)continue;
       if(fC==='cessati'&&!r.cess)continue;
+      var fAz=g('fAz').value;
+      if(fAz!=='all'&&r.az!==fAz)continue;
       /* status filter */
       if(s==='diff'&&r.st!=='both')continue;
       if(s==='diff'&&r.sm&&r.rm&&(r.bm||r.bs==='nz'))continue;
@@ -494,7 +514,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+rzZ+'</span>'+(rzZsub?'<span class="sn">cod: '+rzZsub+'</span>':'')+'</div></td>'+
         '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+( r.rc||'-')+'</span></div></td>'+
         '<td class="'+(bd?'dc':'')+'"><div class="cv">'+bzd+'</div></td>'+
-        '<td class="'+(bd?'dc':'')+'"><div class="cv">'+( r.bc||'-')+'</div></td>'+
+        '<td class="'+(bd?'dc':'')+'"><div class="cv"><span class="badge-val">'+( r.bc||'-')+'</span></div></td>'+
         '<td>'+(r.cessDate?'<span style="color:var(--rd);font-size:.68rem">'+r.cessDate+'</span>':'<span style="color:var(--tx3);font-size:.68rem">-</span>')+'</td>'+
         '<td>'+diffTags(r)+'</td>'+
         '</tr>';
@@ -522,7 +542,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     var ws={};
     var hdrStyle={font:{bold:true},fill:{fgColor:{rgb:'FF3D2B1F'}},font2:{color:{rgb:'FFFFFFFF'}},alignment:{wrapText:true,vertical:'top'}};
     var i,j;
-    var colLetters='ABCDEFGHIJKLMNOPQ'.split('');
+    var colLetters='ABCDEFGHIJKLMNOPQR'.split('');
     for(j=0;j<headers.length;j++){
       ws[colLetters[j]+'1']={v:headers[j],t:'s',s:{font:{bold:true,color:{rgb:'FFFFFFFF'}},fill:{fgColor:{rgb:'FF3D2B1F'}},alignment:{wrapText:true,vertical:'top'}}};
     }
@@ -556,26 +576,27 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       c('A',r.key,null);
       c('B',r.cog,null);
       c('C',r.nom,null);
-      c('D',tipo,r.tipo==='negozio'?'FFE0ECF5':'FFF5EAD8');
-      c('E',r.cessDate||'',r.cess?'FFFDE8E8':null);
-      c('F',presenza,onlyOne?AMB:null);
-      c('G',r.sz?(r.sz+(r.sdz?' - '+r.sdz:'')):'',storeDiff?RED:null);
-      c('H',r.sc?(r.sc+(r.sdc?' - '+r.sdc:'')):'',storeDiff?RED:null);
-      c('I',r.st==='both'?(r.sm?'SI':'NO'):'N/A',storeDiff?RED:(r.st==='both'&&r.sm?GRN:GRY));
-      c('J',r.rzc||'',roleDiff?RED:null);
-      c('K',r.rz||'',roleDiff?RED:null);
-      c('L',r.rc||'',roleDiff?RED:null);
-      c('M',r.st==='both'?(r.rm?'SI':'NO'):'N/A',roleDiff?RED:(r.st==='both'&&r.rm?GRN:GRY));
-      c('N',r.bz||'n/d',badgeDiff?RED:null);
-      c('O',r.bc||'',badgeDiff?RED:null);
-      c('P',r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A',badgeDiff?RED:(r.st==='both'&&r.bs==='ok'?GRN:GRY));
-      c('Q',diffStr,diffFill);
+      c('D',r.az||'',null);
+      c('E',tipo,r.tipo==='negozio'?'FFE0ECF5':'FFF5EAD8');
+      c('F',r.cessDate||'',r.cess?'FFFDE8E8':null);
+      c('G',presenza,onlyOne?AMB:null);
+      c('H',r.sz?(r.sz+(r.sdz?' - '+r.sdz:'')):'',storeDiff?RED:null);
+      c('I',r.sc?(r.sc+(r.sdc?' - '+r.sdc:'')):'',storeDiff?RED:null);
+      c('J',r.st==='both'?(r.sm?'SI':'NO'):'N/A',storeDiff?RED:(r.st==='both'&&r.sm?GRN:GRY));
+      c('K',r.rzc||'',roleDiff?RED:null);
+      c('L',r.rz||'',roleDiff?RED:null);
+      c('M',r.rc||'',roleDiff?RED:null);
+      c('N',r.st==='both'?(r.rm?'SI':'NO'):'N/A',roleDiff?RED:(r.st==='both'&&r.rm?GRN:GRY));
+      c('O',r.bz||'n/d',badgeDiff?RED:null);
+      c('P',r.bc||'',badgeDiff?RED:null);
+      c('Q',r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A',badgeDiff?RED:(r.st==='both'&&r.bs==='ok'?GRN:GRY));
+      c('R',diffStr,diffFill);
       row++;
     }
 
-    ws['!ref']='A1:Q'+(row-1);
+    ws['!ref']='A1:R'+(row-1);
     ws['!cols']=[
-      {wch:10},{wch:18},{wch:15},{wch:14},{wch:18},{wch:14},
+      {wch:10},{wch:18},{wch:15},{wch:18},{wch:14},{wch:18},{wch:14},
       {wch:22},{wch:22},{wch:8},
       {wch:14},{wch:28},{wch:28},{wch:8},
       {wch:16},{wch:16},{wch:8},
@@ -611,6 +632,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   g('fFi').addEventListener('change',refresh);
   g('fTipo').addEventListener('change',refresh);
   g('fCess').addEventListener('change',refresh);
+  g('fAz').addEventListener('change',refresh);
   g('fSe').addEventListener('input',refresh);
 
   /* Mapping page */
