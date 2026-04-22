@@ -160,6 +160,12 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         <option value="negozio">Solo Negozi</option>
         <option value="sede">Solo Sede</option>
       </select>
+      <span class="fl">Rapporto</span>
+      <select id="fCess" class="ftipo">
+        <option value="all">Tutti (Attivi + Cessati)</option>
+        <option value="attivi">Solo Attivi</option>
+        <option value="cessati">Solo Cessati</option>
+      </select>
       <span class="fl">Stato</span>
       <select id="fSt">
         <option value="all">Tutti i record</option>
@@ -181,7 +187,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     </div>
     <div class="tw">
       <table class="data">
-        <colgroup><col><col><col><col><col><col><col><col><col><col></colgroup>
+        <colgroup><col><col><col><col><col><col><col><col><col><col><col></colgroup>
         <thead><tr>
           <th>Matricola</th>
           <th>Cognome / Nome</th>
@@ -192,6 +198,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
           <th>Job Title<br>Hekanize</th>
           <th>Badge<br>Zucchetti</th>
           <th>Badge<br>Hekanize</th>
+          <th>Data<br>Cessazione</th>
           <th>Differenze rilevate</th>
         </tr></thead>
         <tbody id="tB"></tbody>
@@ -356,7 +363,10 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var cdc=String(row['centro_di_costo']||'').trim(),rc=String(row['ENTE_PROMOTORE']||'').trim();
       var storeNum=isN(cdc)?cdc:'';
       var storeDesc=storeNum?String(row['centro_di_costo_descrizione']||'').trim():'';
-      mZ[key]={key:key,cog:String(row['cognome']||'').trim(),nom:String(row['nome']||'').trim(),
+      var cessRaw=row['data_cessazione'];
+      var hasCess=cessRaw!==null&&cessRaw!==undefined&&String(cessRaw).trim()!==''&&String(cessRaw).trim()!=='NaN';
+      var cessStr=hasCess?String(cessRaw).trim():'';
+      mZ[key]={key:key,cog:String(row['cognome']||'').trim(),nom:String(row['nome']||'').trim(),cess:hasCess,cessDate:cessStr,
         sz:storeNum,sdz:storeDesc,rzc:rc,rz:xlate(rc),
         bz:String(row['Badge1']||row['Badge2']||row['Badge3']||'').trim()};
     }
@@ -374,11 +384,11 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         var sm=!!(z.sz&&c.sc&&z.sz===c.sc),rm=nrm(z.rz)===nrm(c.rc);
         var bze=!z.bz,bce=!c.bc,bm=!bze&&!bce&&z.bz===c.bc;
         var bs=bze?'nz':(bce?'nc':(bm?'ok':'diff'));
-        r={key:k,st:'both',cog:z.cog||c.cog,nom:z.nom||c.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:sm,rm:rm,bm:bm,bs:bs};
+        r={key:k,st:'both',cog:z.cog||c.cog,nom:z.nom||c.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:sm,rm:rm,bm:bm,bs:bs,cess:z.cess,cessDate:z.cessDate};
       }else if(z){
-        r={key:k,st:'oz',cog:z.cog,nom:z.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:'',sdc:'',rc:'',bc:'',sm:false,rm:false,bm:false,bs:'nc'};
+        r={key:k,st:'oz',cog:z.cog,nom:z.nom,sz:z.sz,sdz:z.sdz,rzc:z.rzc,rz:z.rz,bz:z.bz,sc:'',sdc:'',rc:'',bc:'',sm:false,rm:false,bm:false,bs:'nc',cess:z.cess,cessDate:z.cessDate};
       }else{
-        r={key:k,st:'oc',cog:c.cog,nom:c.nom,sz:'',sdz:'',rzc:'',rz:'',bz:'',sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:false,rm:false,bm:false,bs:'nz'};
+        r={key:k,st:'oc',cog:c.cog,nom:c.nom,sz:'',sdz:'',rzc:'',rz:'',bz:'',sc:c.sc,sdc:c.sdc,rc:c.rc,bc:c.bc,sm:false,rm:false,bm:false,bs:'nz',cess:false,cessDate:''};
       }
       r.tipo=getTipo(r);
       merged.push(r);
@@ -431,6 +441,9 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       /* tipo filter */
       if(t==='negozio'&&r.tipo!=='negozio')continue;
       if(t==='sede'&&r.tipo!=='sede')continue;
+      var fC=g('fCess').value;
+      if(fC==='attivi'&&r.cess)continue;
+      if(fC==='cessati'&&!r.cess)continue;
       /* status filter */
       if(s==='diff'&&r.st!=='both')continue;
       if(s==='diff'&&r.sm&&r.rm&&(r.bm||r.bs==='nz'))continue;
@@ -463,7 +476,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     var start=pg*PS,page=filtered.slice(start,start+PS),i;
     g('fc').textContent=filtered.length+' risultati';
     var tb=g('tB');
-    if(!page.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--tx3);padding:2rem;font-size:.75rem">Nessun risultato</td></tr>';updP();return;}
+    if(!page.length){tb.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--tx3);padding:2rem;font-size:.75rem">Nessun risultato</td></tr>';updP();return;}
     var rows='';
     for(i=0;i<page.length;i++){
       var r=page[i];
@@ -482,6 +495,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         '<td class="'+(rd?'dc':'')+'"><div class="cv"><span class="'+(rd?'dv':'')+'">'+( r.rc||'-')+'</span></div></td>'+
         '<td class="'+(bd?'dc':'')+'"><div class="cv">'+bzd+'</div></td>'+
         '<td class="'+(bd?'dc':'')+'"><div class="cv">'+( r.bc||'-')+'</div></td>'+
+        '<td>'+(r.cessDate?'<span style="color:var(--rd);font-size:.68rem">'+r.cessDate+'</span>':'<span style="color:var(--tx3);font-size:.68rem">-</span>')+'</td>'+
         '<td>'+diffTags(r)+'</td>'+
         '</tr>';
     }
@@ -508,7 +522,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
     var ws={};
     var hdrStyle={font:{bold:true},fill:{fgColor:{rgb:'FF3D2B1F'}},font2:{color:{rgb:'FFFFFFFF'}},alignment:{wrapText:true,vertical:'top'}};
     var i,j;
-    var colLetters='ABCDEFGHIJKLMNOP'.split('');
+    var colLetters='ABCDEFGHIJKLMNOPQ'.split('');
     for(j=0;j<headers.length;j++){
       ws[colLetters[j]+'1']={v:headers[j],t:'s',s:{font:{bold:true,color:{rgb:'FFFFFFFF'}},fill:{fgColor:{rgb:'FF3D2B1F'}},alignment:{wrapText:true,vertical:'top'}}};
     }
@@ -543,24 +557,25 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       c('B',r.cog,null);
       c('C',r.nom,null);
       c('D',tipo,r.tipo==='negozio'?'FFE0ECF5':'FFF5EAD8');
-      c('E',presenza,onlyOne?AMB:null);
-      c('F',r.sz?(r.sz+(r.sdz?' - '+r.sdz:'')):'',storeDiff?RED:null);
-      c('G',r.sc?(r.sc+(r.sdc?' - '+r.sdc:'')):'',storeDiff?RED:null);
-      c('H',r.st==='both'?(r.sm?'SI':'NO'):'N/A',storeDiff?RED:(r.st==='both'&&r.sm?GRN:GRY));
-      c('I',r.rzc||'',roleDiff?RED:null);
-      c('J',r.rz||'',roleDiff?RED:null);
-      c('K',r.rc||'',roleDiff?RED:null);
-      c('L',r.st==='both'?(r.rm?'SI':'NO'):'N/A',roleDiff?RED:(r.st==='both'&&r.rm?GRN:GRY));
-      c('M',r.bz||'n/d',badgeDiff?RED:null);
-      c('N',r.bc||'',badgeDiff?RED:null);
-      c('O',r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A',badgeDiff?RED:(r.st==='both'&&r.bs==='ok'?GRN:GRY));
-      c('P',diffStr,diffFill);
+      c('E',r.cessDate||'',r.cess?'FFFDE8E8':null);
+      c('F',presenza,onlyOne?AMB:null);
+      c('G',r.sz?(r.sz+(r.sdz?' - '+r.sdz:'')):'',storeDiff?RED:null);
+      c('H',r.sc?(r.sc+(r.sdc?' - '+r.sdc:'')):'',storeDiff?RED:null);
+      c('I',r.st==='both'?(r.sm?'SI':'NO'):'N/A',storeDiff?RED:(r.st==='both'&&r.sm?GRN:GRY));
+      c('J',r.rzc||'',roleDiff?RED:null);
+      c('K',r.rz||'',roleDiff?RED:null);
+      c('L',r.rc||'',roleDiff?RED:null);
+      c('M',r.st==='both'?(r.rm?'SI':'NO'):'N/A',roleDiff?RED:(r.st==='both'&&r.rm?GRN:GRY));
+      c('N',r.bz||'n/d',badgeDiff?RED:null);
+      c('O',r.bc||'',badgeDiff?RED:null);
+      c('P',r.st==='both'?(r.bs==='ok'?'SI':r.bs==='nz'?'N/D Zucchetti':'NO'):'N/A',badgeDiff?RED:(r.st==='both'&&r.bs==='ok'?GRN:GRY));
+      c('Q',diffStr,diffFill);
       row++;
     }
 
-    ws['!ref']='A1:P'+(row-1);
+    ws['!ref']='A1:Q'+(row-1);
     ws['!cols']=[
-      {wch:10},{wch:18},{wch:15},{wch:14},{wch:14},
+      {wch:10},{wch:18},{wch:15},{wch:14},{wch:18},{wch:14},
       {wch:22},{wch:22},{wch:8},
       {wch:14},{wch:28},{wch:28},{wch:8},
       {wch:16},{wch:16},{wch:8},
@@ -595,6 +610,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   g('fSt').addEventListener('change',refresh);
   g('fFi').addEventListener('change',refresh);
   g('fTipo').addEventListener('change',refresh);
+  g('fCess').addEventListener('change',refresh);
   g('fSe').addEventListener('input',refresh);
 
   /* Mapping page */
