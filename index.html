@@ -253,8 +253,6 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
 <script type="application/json" id="md">{"SM": "Store Manager", "VSM": "Vice Store Manager", "SA": "Sales Advisor", "SSA": "Senior Sales Advisor", "SSAP": "Senior Sales Advisor Plus", "JSA": "Junior Sales Advisor", "VM": "Visual", "FC": "Field Coach", "FCMD": "Field Coach", "REC": "Receptionist", "PRM": "Project Manager", "ACC": "Domestic Accounting Specialist", "ACO": "Domestic Accounting Coordinator", "ADM": "Domestic Administration Manager", "AS": "Domestic HR Specialist", "RS": "Domestic HR Specialist", "CCM": "Domestic Control Manager", "CCS": "Control Specialist", "EACC": "Control Specialist", "CSP": "Retail Operations Specialist", "CSU": "Customer Service Specialist", "DROC": "Retail Operations Coordinator", "ECS": "Corporate Partnership Specialist", "HMI": "Chief Marketing Officer", "HS": "Hardware Specialist", "ICS": "Inventory Control Specialist", "LGS": "Warehouse Specialist", "MC": "Maintenance Coordinator", "MCS": "Content Development Specialist", "MPR": "PR \u0026 Corporate Partnership Manager", "OCC": "Omnichannel Customer Service Manager", "OM": "Head of Ecommerce \u0026 Digital", "PLC": "HR Administration Specialist", "PUME": "Purchasing and Merchandising Specialist", "RHD": "Networking Security \u0026 Hardware Coordinator", "RO": "Retail Audit Coordinator", "SAC": "Stock Auditing Coordinator", "SHC": "Ecommerce Shooting Coordinator", "TAP": "Tailoring \u0026 Retail Operations Specialist", "TRC": "Domestic Treasury Specialist", "WAD": "Web Art Director", "BBC": "Cost Controlling \u0026 Purchasing Coordinator", "CBC": "HR Administration Coordinator", "DRM": "", "LGC": ""}</script>
 <script>
 function toggleAzDrop(e){if(e)e.stopPropagation();var d=document.getElementById('azDrop');if(d)d.style.display=d.style.display==='none'?'block':'none';}
-function onAzAll(cb){var cbs=document.querySelectorAll('.az-cb'),i;for(i=0;i<cbs.length;i++)cbs[i].checked=cb.checked;if(window._updAzBtn)window._updAzBtn();if(window._refresh)window._refresh();}
-function onAzCb(){if(window._updAzBtn)window._updAzBtn();if(window._refresh)window._refresh();}
 </script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>(function(){
@@ -430,10 +428,6 @@ function onAzCb(){if(window._updAzBtn)window._updAzBtn();if(window._refresh)wind
         azOpts.appendChild(lbl);
       }
       updAzBtn();
-      var azAllEl=g('azAll');
-      if(azAllEl)azAllEl.onchange=function(){onAzAll(this);};
-      var azCbEls=document.querySelectorAll('.az-cb'),azIdx;
-      for(azIdx=0;azIdx<azCbEls.length;azIdx++)(function(el){el.onchange=function(){onAzCb();};})(azCbEls[azIdx]);
     }
     var notes='',bnz=0,uc={},i3;
     for(i3=0;i3<merged.length;i3++){if(merged[i3].st==='both'&&merged[i3].bs==='nz')bnz++;}
@@ -703,17 +697,20 @@ function onAzCb(){if(window._updAzBtn)window._updAzBtn();if(window._refresh)wind
   window.onAzCb=function(){updAzBtn();refresh();};
   window._updAzBtn=updAzBtn;
   window._refresh=refresh;
-  /* Re-wire onAzCb/onAzAll now that refresh is available */
-  var _azAllFinal=document.getElementById('azAll');
-  if(_azAllFinal)_azAllFinal.onchange=function(){
-    var cbs=document.querySelectorAll('.az-cb'),i;
-    for(i=0;i<cbs.length;i++)cbs[i].checked=this.checked;
-    updAzBtn();refresh();
-  };
-  var _azCbsFinal=document.querySelectorAll('.az-cb'),_azIdx;
-  for(_azIdx=0;_azIdx<_azCbsFinal.length;_azIdx++)(function(el){
-    el.onchange=function(){updAzBtn();refresh();};
-  })(_azCbsFinal[_azIdx]);
+  /* Event delegation: handles all az-checkbox changes regardless of DOM timing */
+  document.addEventListener('change',function(e){
+    var t=e.target;
+    if(!t)return;
+    if(t.id==='azAll'){
+      var cbs=document.querySelectorAll('.az-cb'),i;
+      for(i=0;i<cbs.length;i++)cbs[i].checked=t.checked;
+      if(window._updAzBtn)window._updAzBtn();
+      if(window._refresh)window._refresh();
+    } else if(t.classList&&t.classList.contains('az-cb')){
+      if(window._updAzBtn)window._updAzBtn();
+      if(window._refresh)window._refresh();
+    }
+  });
   document.addEventListener('click',function(e){
     var wrap=g('azWrap');
     if(wrap&&!wrap.contains(e.target)){var d=g('azDrop');if(d)d.style.display='none';}
