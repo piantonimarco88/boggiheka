@@ -177,9 +177,9 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       </select>
       <span class="fl">Azienda</span>
       <div class="ms-wrap" id="azWrap">
-        <button type="button" class="ms-btn" id="azBtn" onclick="toggleAzDrop(event)">Tutte le aziende <span class="ms-arr">&#9662;</span></button>
+        <button type="button" class="ms-btn" id="azBtn">Tutte le aziende <span class="ms-arr">&#9662;</span></button>
         <div class="ms-drop" id="azDrop" style="display:none">
-          <label class="ms-item ms-all"><input type="checkbox" id="azAll" checked onchange="onAzAll(this)"><span>Tutte le aziende</span></label>
+          <label class="ms-item ms-all"><input type="checkbox" id="azAll" checked ><span>Tutte le aziende</span></label>
           <div id="azOptions"></div>
         </div>
       </div>
@@ -251,6 +251,11 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
 <input type="file" id="iZ" accept=".xlsx,.xls" style="position:absolute;left:-9999px;top:-9999px">
 <input type="file" id="iC" accept=".csv" style="position:absolute;left:-9999px;top:-9999px">
 <script type="application/json" id="md">{"SM": "Store Manager", "VSM": "Vice Store Manager", "SA": "Sales Advisor", "SSA": "Senior Sales Advisor", "SSAP": "Senior Sales Advisor Plus", "JSA": "Junior Sales Advisor", "VM": "Visual", "FC": "Field Coach", "FCMD": "Field Coach", "REC": "Receptionist", "PRM": "Project Manager", "ACC": "Domestic Accounting Specialist", "ACO": "Domestic Accounting Coordinator", "ADM": "Domestic Administration Manager", "AS": "Domestic HR Specialist", "RS": "Domestic HR Specialist", "CCM": "Domestic Control Manager", "CCS": "Control Specialist", "EACC": "Control Specialist", "CSP": "Retail Operations Specialist", "CSU": "Customer Service Specialist", "DROC": "Retail Operations Coordinator", "ECS": "Corporate Partnership Specialist", "HMI": "Chief Marketing Officer", "HS": "Hardware Specialist", "ICS": "Inventory Control Specialist", "LGS": "Warehouse Specialist", "MC": "Maintenance Coordinator", "MCS": "Content Development Specialist", "MPR": "PR \u0026 Corporate Partnership Manager", "OCC": "Omnichannel Customer Service Manager", "OM": "Head of Ecommerce \u0026 Digital", "PLC": "HR Administration Specialist", "PUME": "Purchasing and Merchandising Specialist", "RHD": "Networking Security \u0026 Hardware Coordinator", "RO": "Retail Audit Coordinator", "SAC": "Stock Auditing Coordinator", "SHC": "Ecommerce Shooting Coordinator", "TAP": "Tailoring \u0026 Retail Operations Specialist", "TRC": "Domestic Treasury Specialist", "WAD": "Web Art Director", "BBC": "Cost Controlling \u0026 Purchasing Coordinator", "CBC": "HR Administration Coordinator", "DRM": "", "LGC": ""}</script>
+<script>
+function toggleAzDrop(e){if(e)e.stopPropagation();var d=document.getElementById('azDrop');if(d)d.style.display=d.style.display==='none'?'block':'none';}
+function onAzAll(cb){var cbs=document.querySelectorAll('.az-cb'),i;for(i=0;i<cbs.length;i++)cbs[i].checked=cb.checked;if(window._updAzBtn)window._updAzBtn();if(window._refresh)window._refresh();}
+function onAzCb(){if(window._updAzBtn)window._updAzBtn();if(window._refresh)window._refresh();}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>(function(){
   var DMAP=JSON.parse(document.getElementById('md').textContent);
@@ -421,10 +426,14 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       for(i0=0;i0<azKeys.length;i0++){
         var lbl=document.createElement('label');
         lbl.className='ms-item';
-        lbl.innerHTML='<input type="checkbox" class="az-cb" value="'+azKeys[i0]+'" checked onchange="onAzCb()"><span>'+azKeys[i0]+'</span>';
+        lbl.innerHTML='<input type="checkbox" class="az-cb" value="'+azKeys[i0]+'" checked ><span>'+azKeys[i0]+'</span>';
         azOpts.appendChild(lbl);
       }
       updAzBtn();
+      var azAllEl=g('azAll');
+      if(azAllEl)azAllEl.onchange=function(){onAzAll(this);};
+      var azCbEls=document.querySelectorAll('.az-cb'),azIdx;
+      for(azIdx=0;azIdx<azCbEls.length;azIdx++)(function(el){el.onchange=function(){onAzCb();};})(azCbEls[azIdx]);
     }
     var notes='',bnz=0,uc={},i3;
     for(i3=0;i3<merged.length;i3++){if(merged[i3].st==='both'&&merged[i3].bs==='nz')bnz++;}
@@ -636,6 +645,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   g('bPrev').addEventListener('click',function(){
     if(pg>0){pg=pg-1;rTable();}
   });
+  g('azBtn').addEventListener('click',function(e){e.stopPropagation();var d=g('azDrop');if(d)d.style.display=d.style.display==='none'?'block':'none';});
   g('bNext').addEventListener('click',function(){
     var tp=Math.ceil(filtered.length/PS);
     if(pg<tp-1){pg=pg+1;rTable();}
@@ -678,16 +688,15 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       btn.firstChild.nodeValue=label;
     }
   }
-  window.toggleAzDrop=function(e){
-    if(e)e.stopPropagation();
-    var d=g('azDrop');if(d)d.style.display=d.style.display==='none'?'block':'none';
-  };
+
   window.onAzAll=function(cb){
     var cbs=document.querySelectorAll('.az-cb'),i;
     for(i=0;i<cbs.length;i++)cbs[i].checked=cb.checked;
     updAzBtn();refresh();
   };
   window.onAzCb=function(){updAzBtn();refresh();};
+  window._updAzBtn=updAzBtn;
+  window._refresh=refresh;
   document.addEventListener('click',function(e){
     var wrap=g('azWrap');
     if(wrap&&!wrap.contains(e.target)){var d=g('azDrop');if(d)d.style.display='none';}
