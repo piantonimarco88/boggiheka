@@ -398,18 +398,20 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       r.tipo=getTipo(r);
       merged.push(r);
     }
-    /* Populate azienda filter */
+    /* Populate azienda multi-select */
     var azSet={},i0;
     for(i0=0;i0<merged.length;i0++){if(merged[i0].az)azSet[merged[i0].az]=1;}
     var azKeys=Object.keys(azSet).sort();
-    var azSel=g('fAz');
-    var azCurrent=azSel.value;
-    azSel.innerHTML='<option value="all">Tutte le aziende</option>';
-    for(i0=0;i0<azKeys.length;i0++){
-      var opt=document.createElement('option');
-      opt.value=azKeys[i0];opt.textContent=azKeys[i0];
-      if(azKeys[i0]===azCurrent)opt.selected=true;
-      azSel.appendChild(opt);
+    var azOpts=g('azOptions');
+    if(azOpts){
+      azOpts.innerHTML='';
+      for(i0=0;i0<azKeys.length;i0++){
+        var lbl=document.createElement('label');
+        lbl.className='ms-item';
+        lbl.innerHTML='<input type="checkbox" class="az-cb" value="'+azKeys[i0]+'" checked onchange="onAzCb()"><span>'+azKeys[i0]+'</span>';
+        azOpts.appendChild(lbl);
+      }
+      updAzBtn();
     }
     var notes='',bnz=0,uc={},i3;
     for(i3=0;i3<merged.length;i3++){if(merged[i3].st==='both'&&merged[i3].bs==='nz')bnz++;}
@@ -462,8 +464,7 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
       var fC=g('fCess').value;
       if(fC==='attivi'&&r.cess)continue;
       if(fC==='cessati'&&!r.cess)continue;
-      var fAz=g('fAz').value;
-      if(fAz!=='all'&&r.az!==fAz)continue;
+      if(!azIsSelected(r.az))continue;
       /* status filter */
       if(s==='diff'&&r.st!=='both')continue;
       if(s==='diff'&&r.sm&&r.rm&&(r.bm||r.bs==='nz'))continue;
@@ -646,6 +647,36 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
   });
   g('bRM').addEventListener('click',function(){
     if(confirm('Ripristinare il mapping predefinito?')){MAP=JSON.parse(JSON.stringify(DMAP));rMap();}
+  });
+  function azIsSelected(val){
+    var cbs=document.querySelectorAll('.az-cb'),i;
+    if(!cbs.length)return true;
+    for(i=0;i<cbs.length;i++){if(cbs[i].value===val&&cbs[i].checked)return true;}
+    return false;
+  }
+  function updAzBtn(){
+    var cbs=document.querySelectorAll('.az-cb'),total=cbs.length,cnt=0,i;
+    for(i=0;i<cbs.length;i++){if(cbs[i].checked)cnt++;}
+    var allCb=g('azAll');
+    if(allCb){allCb.indeterminate=(cnt>0&&cnt<total);allCb.checked=(cnt===total);}
+    var btn=g('azBtn');
+    if(btn){
+      var label=cnt===0?'Nessuna azienda ':cnt===total?'Tutte le aziende ':cnt+' aziend'+(cnt===1?'a':'e')+' ';
+      btn.firstChild.nodeValue=label;
+    }
+  }
+  window.toggleAzDrop=function(){
+    var d=g('azDrop');if(d)d.style.display=d.style.display==='none'?'block':'none';
+  };
+  window.onAzAll=function(cb){
+    var cbs=document.querySelectorAll('.az-cb'),i;
+    for(i=0;i<cbs.length;i++)cbs[i].checked=cb.checked;
+    updAzBtn();refresh();
+  };
+  window.onAzCb=function(){updAzBtn();refresh();};
+  document.addEventListener('click',function(e){
+    var wrap=g('azWrap');
+    if(wrap&&!wrap.contains(e.target)){var d=g('azDrop');if(d)d.style.display='none';}
   });
 })();</script>
 </body>
