@@ -59,6 +59,15 @@ body{font-family:'Century Gothic','Futura',sans-serif;background:var(--bpg);colo
 .fl{font-size:.62rem;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
 .fbar select,.fbar input[type=text]{font-family:'Century Gothic',sans-serif;font-size:.78rem;padding:.4rem .7rem;border:1px solid var(--br);border-radius:var(--rs);background:var(--wh);color:var(--tx);}
 .fbar select.ftipo{border-color:var(--bm);color:var(--bm);background:var(--blt);}
+.ms-wrap{position:relative;display:inline-block;}
+.ms-btn{font-family:'Century Gothic','Futura',sans-serif;font-size:.78rem;padding:.4rem .75rem;border:1px solid var(--bm);border-radius:var(--rs);background:var(--blt);color:var(--bm);cursor:pointer;min-width:180px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+.ms-btn:hover{background:var(--bmd);}
+.ms-arr{font-size:.65rem;}
+.ms-drop{position:absolute;top:calc(100% + 4px);left:0;z-index:999;background:var(--wh);border:1px solid var(--brk);border-radius:var(--rs);min-width:210px;max-height:240px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.12);}
+.ms-item{display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;font-size:.78rem;cursor:pointer;color:var(--tx);}
+.ms-item:hover{background:var(--blt);}
+.ms-item input[type=checkbox]{margin:0;cursor:pointer;accent-color:var(--bm);}
+.ms-all{border-bottom:1px solid var(--br);color:var(--bm);}
 .tw{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;}
 table.data{width:100%;border-collapse:collapse;font-size:.74rem;table-layout:fixed;}
 table.data colgroup col:nth-child(1){width:84px;}
@@ -167,9 +176,13 @@ table.maptbl td:first-child{font-family:monospace;font-size:.82rem;font-weight:6
         <option value="cessati">Solo Cessati</option>
       </select>
       <span class="fl">Azienda</span>
-      <select id="fAz" class="ftipo">
-        <option value="all">Tutte le aziende</option>
-      </select>
+      <div class="ms-wrap" id="azWrap">
+        <button type="button" class="ms-btn" id="azBtn" onclick="toggleAzDrop()">Tutte le aziende <span class="ms-arr">&#9662;</span></button>
+        <div class="ms-drop" id="azDrop" style="display:none">
+          <label class="ms-item ms-all"><input type="checkbox" id="azAll" checked onchange="onAzAll(this)"><span>Tutte le aziende</span></label>
+          <div id="azOptions"></div>
+        </div>
+      </div>
       <span class="fl">Stato</span>
       <select id="fSt">
         <option value="all">Tutti i record</option>
